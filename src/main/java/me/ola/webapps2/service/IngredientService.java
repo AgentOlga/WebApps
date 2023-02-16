@@ -3,6 +3,7 @@ package me.ola.webapps2.service;
 import me.ola.webapps2.model.Ingredient;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -23,5 +24,27 @@ public interface IngredientService {
      * @return ингредиент
      */
     Optional<Ingredient> getById(Long id);
+
+    /**
+     * Обновление ингредиента
+     * @param id идентификатор
+     * @param ingredient ингредиент
+     * @return Обновленный ингредиент
+     */
+
+    Ingredient update (Long id, Ingredient ingredient);
+
+    /**
+     * Удаление ингредиента
+     * @param id идентификатор
+     * @return удаленный ингредиент
+     */
+    Ingredient delete(Long id);
+
+    /**
+     *
+     * @return мапа ингредиентов
+     */
+    Map<Long, Ingredient> getAll();
 
 }

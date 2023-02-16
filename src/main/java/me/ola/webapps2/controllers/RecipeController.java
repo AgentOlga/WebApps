@@ -1,9 +1,12 @@
 package me.ola.webapps2.controllers;
 
+import me.ola.webapps2.model.Ingredient;
 import me.ola.webapps2.service.RecipeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import me.ola.webapps2.model.Recipe;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/recipe")
@@ -21,7 +24,21 @@ public class RecipeController {
 
 @GetMapping("/{id}")
     public ResponseEntity<Recipe> getById(@PathVariable Long id) {
-    return ResponseEntity.of(recipeService.getById(id));
+         return ResponseEntity.of(recipeService.getById(id));
 }
+    @PutMapping("/{id}")
+    public ResponseEntity<Recipe> update(@PathVariable Long id, @RequestBody Recipe recipe) {
+        return ResponseEntity.ok(recipeService.update(id, recipe));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Recipe> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(recipeService.delete(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<Long, Recipe>> getAll() {
+        return ResponseEntity.ok(recipeService.getAll());
+    }
 
 }
