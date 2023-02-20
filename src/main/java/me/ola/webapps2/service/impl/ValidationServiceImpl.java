@@ -1,8 +1,10 @@
-package me.ola.webapps2.service;
+package me.ola.webapps2.service.impl;
 
 import me.ola.webapps2.model.Ingredient;
 import me.ola.webapps2.model.Recipe;
 import org.apache.commons.lang3.StringUtils;
+import me.ola.webapps2.service.ValidationService;
+import org.springframework.stereotype.Service;
 
 public class ValidationServiceImpl implements ValidationService {
     @Override
