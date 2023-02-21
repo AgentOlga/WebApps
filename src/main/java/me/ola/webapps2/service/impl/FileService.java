@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map;
 import java.nio.file.Files;
 
@@ -27,7 +29,7 @@ public class FileService {
            throw  new RuntimeException();
         }
     }
-    public <T> Map<Long, T> readMapFromFile(Path path, TypeReference<HashMap<Long, T>> typeReference) {
+    public <T> Map<Long, T> readMapFromFile(Path path, TypeReference<Map<Long, T>> typeReference) {
         try {
             String json = Files.readString(path);
             if (json.isEmpty()) {
@@ -43,9 +45,24 @@ public class FileService {
         }
 
     }
+    public void uploadFile(MultipartFile file, Path filePath) throws IOException {
+        Files.createDirectories(filePath.getParent());
+        Files.deleteIfExists(filePath);
+
+        try (
+
+                InputStream is = file.getInputStream();
+                OutputStream os = Files.newOutputStream(filePath);
+                BufferedInputStream bis = new BufferedInputStream(is, 1024);
+                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
+        ) {
+            bis.transferTo(bos);
+        }
+    }
+
     private void  createNewFile(Path path) throws IOException{
-        Files.deleteIfExists(path);
         Files.createFile(path);
+        Files.deleteIfExists(path);
     }
 
 

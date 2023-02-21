@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.jdi.connect.VMStartException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import me.ola.webapps2.model.Recipe;
 import org.springframework.beans.factory.annotation.Value;
 import me.ola.webapps2.exception.ValidationException;
 import me.ola.webapps2.model.Ingredient;
@@ -12,10 +13,13 @@ import me.ola.webapps2.service.IngredientService;
 import me.ola.webapps2.service.ValidationService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 @Service
 @RequiredArgsConstructor
@@ -70,10 +74,22 @@ private String ingredientsFileName;
         return ingredients;
     }
 
+    @Override
+    public File readFile() {
+        return ingredientsPatch.toFile();
+    }
+
+    @Override
+    public void uploadFile(MultipartFile file) throws IOException {
+        fileService.uploadFile(file, ingredientsPatch);
+        ingredients = fileService.readMapFromFile(ingredientsPatch, new TypeReference<Map<Long, Ingredient>>(){});
+
+    }
+
     @PostConstruct
     private void unit() {
        ingredientsPatch =  Path.of(ingredientsFilePatch, ingredientsFileName );
-       ingredients = fileService.readMapFromFile(ingredientsPatch, new TypeReference<HashMap<Long, Ingredient>>(){});
+       ingredients = fileService.readMapFromFile(ingredientsPatch, new TypeReference<Map<Long, Ingredient>>(){});
     }
 
 }

@@ -11,7 +11,10 @@ import me.ola.webapps2.model.Recipe;
 import me.ola.webapps2.service.RecipeService;
 import me.ola.webapps2.service.ValidationService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
             throw new ValidationException(recipe.toString());
         }
         recipes.put(idCounter++, recipe );
+        fileService.saveMapToFile(recipes, recipesPatch);
 
         return  recipe;
     }
@@ -71,10 +75,22 @@ public class RecipeServiceImpl implements RecipeService {
         return recipes;
     }
 
+    @Override
+    public File readFile() {
+        return recipesPatch.toFile();
+    }
+
+    @Override
+    public void uploadFile(MultipartFile file) throws IOException {
+        fileService.uploadFile(file, recipesPatch);
+        recipes = fileService.readMapFromFile(recipesPatch, new TypeReference<Map<Long, Recipe>>(){});
+
+    }
+
     @PostConstruct
     private void unit() {
         recipesPatch =  Path.of(recipesFilePatch, recipesFileName );
-        recipes = fileService.readMapFromFile(recipesPatch, new TypeReference<HashMap<Long, Recipe>>(){});
+        recipes = fileService.readMapFromFile(recipesPatch, new TypeReference<Map<Long, Recipe>>(){});
 
     }
 }

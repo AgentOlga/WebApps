@@ -2,7 +2,10 @@ package me.ola.webapps2.service;
 
 import me.ola.webapps2.model.Ingredient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,4 +50,16 @@ public interface IngredientService {
      */
     Map<Long, Ingredient> getAll();
 
+    /**
+     * Чтение файла ингредиентов
+     * @return файла ингредиентов
+     */
+    File readFile();
+
+    /**
+     * Загрузка файла ингредиентов
+     * @param file файл ингредиентов
+     * @throws IOException
+     */
+    void uploadFile(MultipartFile file) throws IOException;
 }
