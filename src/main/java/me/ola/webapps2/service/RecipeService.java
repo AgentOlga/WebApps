@@ -60,4 +60,7 @@ public interface RecipeService {
      * @throws IOException
      */
     void uploadFile(MultipartFile file) throws IOException;
+
+    File makeReadyRecipe() throws IOException;
+
 }

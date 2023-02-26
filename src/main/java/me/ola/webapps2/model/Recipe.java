@@ -1,7 +1,6 @@
 package me.ola.webapps2.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -9,13 +8,44 @@ import java.util.List;
 /**
  * Рецепт
  */
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
+
 public class Recipe {
     private String nameRecipe;
     private int cookingTime;
     private List<Ingredient> ingredients;
     private List<String> steps;
 
+    @Override
+    public String toString(){
+        return  nameRecipe + "\n Время приготовления: " + cookingTime;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }

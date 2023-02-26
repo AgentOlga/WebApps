@@ -31,6 +31,9 @@ public class RecipeServiceImpl implements RecipeService {
     private String recipesFilePatch;
     @Value("${name.of.recipes.file}")
     private String recipesFileName;
+    @Value("${name.of.reipes.txt.file}")
+    private String recipesTxtFileName;
+
 
 
 
@@ -87,10 +90,44 @@ public class RecipeServiceImpl implements RecipeService {
 
     }
 
+
+
+    @Override
+    public File makeReadyRecipe() throws IOException {
+       return fileService
+               .saveToFile(recipesToString(),Path.of(recipesFilePatch, recipesTxtFileName))
+               .toFile();
+
+    }
+
+    private String recipesToString() {
+        return null;
+    }
+
     @PostConstruct
     private void unit() {
         recipesPatch =  Path.of(recipesFilePatch, recipesFileName );
         recipes = fileService.readMapFromFile(recipesPatch, new TypeReference<Map<Long, Recipe>>(){});
 
     }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        String ListElements = " - ";
+
+        for (Recipe recipe : recipes.values()) {
+
+            sb.append("\n").append(recipe.toString()).append("\n");
+            sb.append("\nИнгредиент");
+            for (Ingredient ingredient : recipe.getIngredients()) {
+                sb.append(ingredient.toString()).append("\n");
+            }
+
+            sb.append("\nИнструкция по приготовлению рецепта");
+            for (String step : recipe.getSteps()) {
+                sb.append(ListElements).append(step).append("\n");
+            }
+        }
+        return sb.append("\n").toString();
+    }
+
 }
